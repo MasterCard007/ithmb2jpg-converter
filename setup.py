@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 setup(
     name="ithmb2jpg-converter",
     version="0.0.12",
-    author="Your Name",
+    author="MasterCard007",
     author_email="",
     description="A tool to convert .ithmb files into .jpg images",
     long_description=long_description,
