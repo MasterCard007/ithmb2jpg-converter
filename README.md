@@ -31,7 +31,7 @@ pip install tqdm ithmbconverter
 3. Run the script:
 
 ```bash
-python ithmb_to_jpg_input.py
+python ithmb2jpg.py
 ```
 
 4. Enter the required directories when prompted:
