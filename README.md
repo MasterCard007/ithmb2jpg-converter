@@ -1,27 +1,29 @@
 # Ithmb2Jpg Converter
 
-This Python script is designed to convert `.ithmb` files (iPod photo cache files) into `.jpg` image files. It allows users to specify input and output directories, validates `.ithmb` files, extracts images, and logs the conversion process.
+This Python script extracts and converts `.ithmb` files (iPod photo cache files) into `.jpg` image files. It allows users to specify input and output directories, scans `.ithmb` files for embedded JPEG images, and logs the conversion process.
 
 ## Features
 
 - **Dynamic Input/Output:** Prompts the user to specify the input folder containing `.ithmb` files and the output folder for `.jpg` images.
-- **File Validation:** Ensures `.ithmb` files can be processed before attempting conversion.
+- **JPEG Extraction:** Detects and extracts valid JPEG images from `.ithmb` files instead of assuming a raw format.
 - **Parallel Processing:** Utilizes multiple CPU cores for faster conversions.
+- **Automatic Corruption Check:** Deletes corrupted or unreadable `.jpg` files after extraction.
 - **Detailed Logging:** Tracks successfully converted files and logs errors encountered during the process.
-- **Progress Feedback:** Displays progress bars for file validation and image extraction using the `tqdm` library.
+- **Progress Feedback:** Displays progress bars for file scanning and image extraction using the `tqdm` library.
 
 ## Prerequisites
 
 Before running the script, ensure the following dependencies are installed:
 
 - Python 3.6 or higher
-- `ithmbconverter` library (required for `.ithmb` file handling)
-- `tqdm` library (for progress bars)
+- `opencv-python` (for image validation)
+- `tqdm` (for progress bars)
+- `icecream` (for debugging)
 
 You can install the required dependencies using pip:
 
 ```bash
-pip install tqdm ithmbconverter
+pip install tqdm opencv-python icecream
 ```
 
 ## Usage
@@ -31,7 +33,7 @@ pip install tqdm ithmbconverter
 3. Run the script:
 
 ```bash
-python ithmb2jpg.py
+python ithmb_converter.py
 ```
 
 4. Enter the required directories when prompted:
@@ -44,13 +46,13 @@ python ithmb2jpg.py
 Enter the path to the folder containing .ithmb files: /path/to/ithmb/files
 Enter the path to the output folder: /path/to/output
 Found 10 .ithmb files.
-[Progress bars for validation and conversion]
+[Progress bars for scanning and conversion]
 Conversion summary:
 Successfully converted: 8 files
   - file1.ithmb: 20 images
   - file2.ithmb: 15 images
 Error summary:
-Invalid file structure: 2 occurrences
+No JPEG found: 2 occurrences
   - file9.ithmb
   - file10.ithmb
 ```
@@ -61,10 +63,10 @@ Invalid file structure: 2 occurrences
    - The script prompts the user to input the paths to the directories for processing and saving files.
 2. **File Scanning:**
    - Recursively scans the input directory for `.ithmb` files.
-3. **Validation:**
-   - Uses `ITHMBConverter` to check if files can be processed.
-4. **Image Extraction:**
-   - Extracts images from valid `.ithmb` files and saves them as `.jpg` files in the output directory.
+3. **JPEG Extraction:**
+   - Scans `.ithmb` files for embedded JPEG images and extracts them.
+4. **Image Validation:**
+   - Uses OpenCV to verify extracted images and delete corrupted files.
 5. **Logging:**
    - Keeps track of successful conversions and logs errors for troubleshooting.
 
@@ -78,13 +80,14 @@ The converted `.jpg` files will be saved in the specified output directory with 
 
 ## Error Handling
 
-- **Invalid File Structure:** Files that fail validation are logged.
-- **Save Errors:** Issues during image saving (e.g., write permissions) are also logged.
+- **No JPEG Found:** If an `.ithmb` file does not contain valid JPEGs, it is logged.
+- **Corrupt Image Removal:** Extracted JPEGs that fail validation are automatically deleted.
+- **Permissions Issues:** If the script cannot write to the output folder, it logs the error.
 
 ## Limitations
 
-- Requires the `ithmbconverter` library, which must be installed separately.
-- Assumes `.ithmb` files are stored in a single root directory or its subdirectories.
+- The script assumes `.ithmb` files contain embedded JPEG images.
+- If a different encoding is used, the script may not work correctly.
 
 ## License
 
@@ -93,3 +96,4 @@ This script is provided "as-is" under the MIT License. Feel free to modify and d
 ---
 
 Enjoy converting your `.ithmb` files into accessible `.jpg` images!
+
